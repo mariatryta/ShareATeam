@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/team">Team</router-link> |
+      <router-link to="/your-team">Your Team</router-link> |
+      <router-link to="/">Login</router-link>
+      <button id="signout">Sign Out</button>
     </div>
     <router-view/>
   </div>
@@ -27,5 +29,14 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+#nav a:hover{
+  color: #131b22;
+}
+#signout{
+  margin: 20px;
+  background-color: transparent;
+  border: solid 1px #a4dbc5;
+  padding: 10px
 }
 </style>
