@@ -8,6 +8,7 @@
 </template>
 
 <script>
+const fb = require('../firebaseConfig.js')
 
 export default {
   data() {
@@ -20,8 +21,8 @@ export default {
   },
   methods: {
     login() {
-        fb.auth.signInWithEmailAndPassword(this.input.email, this.input.password).then(user => {
-            this.$store.commit('setCurrentUser', user)
+        fb.auth.signInWithEmailAndPassword(this.input.email, this.input.password).then(credentials => {
+            this.$store.commit('setCurrentUser', credentials.user)
             this.$store.dispatch('fetchUserProfile')
             this.$router.push('/team') //new route
         }).catch(err => {

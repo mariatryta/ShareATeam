@@ -9,6 +9,8 @@
 </template>
 
 <script>
+const fb = require('../firebaseConfig.js')
+
 export default {
   data() {
     return {
@@ -21,16 +23,17 @@ export default {
   },
   methods: {
     signup() {
-        fb.auth.createUserWithEmailAndPassword(this.signupForm.email, this.signupForm.password).then(user => {
-            this.$store.commit('setCurrentUser', user)
-
-            // create user obj
-            fb.usersCollection.doc(user.uid).set({
-                name: this.signupForm.name,
-                title: this.signupForm.title
+        fb.auth.createUserWithEmailAndPassword(this.input.email, this.input.password).then(credentials => {
+            // set current user  state
+            this.$store.commit('setCurrentUser', credentials.user)
+            console.log(fb.usersCollection)
+            console.log(credentials.user)
+            // create user doc with the same UID  
+            fb.usersCollection.doc(credentials.user.uid).set({
+                name: this.input.name,
             }).then(() => {
                 this.$store.dispatch('fetchUserProfile')
-                this.$router.push('/dashboard')
+                this.$router.push('/team') //redirect after signup
             }).catch(err => {
                 console.log(err)
             })

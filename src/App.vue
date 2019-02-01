@@ -4,11 +4,38 @@
       <router-link to="/team">Team</router-link> |
       <router-link to="/your-team">Your Team</router-link> |
       <router-link to="/">Login</router-link>
-      <button id="signout">Sign Out</button>
+      <button id="signout" @click="logout">Sign Out</button>
     </div>
-    <router-view/>
+    <router-view></router-view>
   </div>
 </template>
+<script>
+const fb = require('./firebaseConfig.js')
+
+export default {
+  methods: {
+    logout() {
+      fb.auth.signOut().then(() => {
+          this.$store.dispatch('clearData')
+          this.$router.push('/')
+      }).catch(err => {
+          console.log(err)
+      })
+    }
+  },
+  mounted() {
+    fb.auth.onAuthStateChanged((user) => {
+      if (user) {
+          console.log('User is logged in');
+          this.$store.commit('setCurrentUser', user)
+          this.$store.dispatch('fetchUserProfile')
+      } else {
+          console.log('User is not logged in.');
+      }
+    });
+  },
+}
+</script>
 
 <style>
 #app {

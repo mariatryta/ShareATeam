@@ -1,6 +1,7 @@
 <template>
   <div class="yourteam">
     <team></team>
+    <p>That is your team</p>
   </div>
 </template>
 
@@ -12,5 +13,8 @@ export default {
   components: {
     team: Team,
   },
+  created() {
+    this.$store.dispatch('getTeam');
+  } 
 };
 </script>

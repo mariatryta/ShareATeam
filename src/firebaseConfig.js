@@ -16,9 +16,15 @@ firebase.initializeApp(config)
 const db = firebase.firestore()
 const auth = firebase.auth()
 const currentUser = auth.currentUser
+const usersCollection = db.collection('users');
+const employeesCollection = db.collection('team')
+const teamCollection = db.collection('chosenteam')
 
 export {
     db,
     auth,
     currentUser,
+    usersCollection,
+    employeesCollection,
+    teamCollection
 }
