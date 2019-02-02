@@ -3,15 +3,15 @@ import Vuex from 'vuex';
 const fb = require('./firebaseConfig.js')
 
 Vue.use(Vuex);
-
-
+const axios = require('axios');
 
 export default new Vuex.Store({
   state: {
     currentUser: null,
     userProfile: {},
     employees:[],
-    team:[]
+    team:[],
+    linked:null
   },
   mutations: {
     // updating user state
@@ -26,7 +26,9 @@ export default new Vuex.Store({
     },
     setTeam(state,val){
       state.team = val
-      console.log('set team' + state.team);    
+    },
+    setLinked(state,val){
+      state.linked = val
     }
       
   },
@@ -73,11 +75,27 @@ export default new Vuex.Store({
       let newMember = {
         'id':member.key,
         ...member.data}
-      console.log(member);
        fb.teamCollection.doc(state.currentUser.uid).set({[member.key]:newMember},{merge: true}).then(function() {
          console.log("Document successfully written!");
       });
       dispatch('getTeam')
     },
+
+    // Link handling
+    getData({commit}, linkId){
+      console.log(linkId);
+      axios
+      .get('https://firestore.googleapis.com/v1beta1/projects/teamshare-245f8/databases/(default)/documents/chosenteam/'+ linkId)
+      .then(function(response){
+        let data = response.data.fields;
+        let arr=[];
+        let stringArr = [];
+        for (let key in data) {
+          arr.push(data[key].mapValue.fields)
+        }
+        commit('setLinked', arr)
+      }
+      )
+    }
   }
 });

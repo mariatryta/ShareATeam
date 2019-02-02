@@ -32,6 +32,15 @@ const router = new Router({
         requiresAuth: true,
       },
     },
+    {
+      path: '/sharing/:id',
+      name: 'sharing',
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/Link.vue'),
+      
+    },
   
     
   ],
