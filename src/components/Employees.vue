@@ -1,17 +1,11 @@
 <template>
   <div class="employees">
      <div class="flex">
-        <div v-for="(member, idx) in team" :key="idx" class="card" v-on:click="addToTeam(member)">
-                <h1>{{ member.name }} {{member.last}}</h1>
-                <p>{{member.role}}</p>
+        <div v-for="(employee, idx) in employees" :key="idx" class="card" v-on:click="addToTeam(employee)">
+                <h1>{{ employee.data.first }} {{employee.data.last}}</h1>
+                <p>{{employee.data.role}}</p>
         </div>
     </div>
-    <!-- <div class="flex" v-show="!newTeam === undefined || !newTeam == 0"> >
-        <div v-for="(member, idx) in newTeam" :key="idx" class="card">
-                <h1>{{ member.name }} {{member.last}}</h1>
-                <p>{{member.role}}</p>
-        </div>
-    </div> -->
   </div>
 </template>
 
@@ -20,9 +14,14 @@
 export default {
   name: 'home',
   computed: {
-    team(){
+    employees(){
         return this.$store.state.employees;
     }
+  },
+  methods: {
+      addToTeam(employee){
+          this.$store.dispatch('addMembertoTeam', employee)
+      }
   },
 }
 </script>

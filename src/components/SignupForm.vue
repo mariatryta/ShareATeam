@@ -37,6 +37,7 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
+            fb.teamCollection.doc(credentials.user.uid).set()
         }).catch(err => {
             console.log(err)
         })
