@@ -1,5 +1,6 @@
 # new-app
 link: https://teamshare-245f8.firebaseapp.com/login
+
 technologies used: VueJs, Vuex, Vue-router, Firebase Cloud 
 ## Project setup
 ```
