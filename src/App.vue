@@ -1,23 +1,30 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/team">Team</router-link> |
+      <router-link to="/">Team</router-link> |
       <router-link to="/your-team">Your Team</router-link> |
-      <router-link to="/">Login</router-link>
-      <button id="signout" @click="logout">Sign Out</button>
+      <router-link to="/login" id='login-btn' v-if="status == null">Login</router-link>
+      <button id="signout" @click="logout" v-if="status != null">Sign Out</button>
     </div>
-    <router-view></router-view>
+    <transition name="fade"  mode="out-in">
+        <router-view></router-view>
+    </transition>
   </div>
 </template>
 <script>
 const fb = require('./firebaseConfig.js')
 
 export default {
+  computed: {
+    status(){
+      return this.$store.state.currentUser
+    }
+  },
   methods: {
     logout() {
       fb.auth.signOut().then(() => {
           this.$store.dispatch('clearData')
-          this.$router.push('/')
+          this.$router.push('/login')
       }).catch(err => {
           console.log(err)
       })
@@ -38,32 +45,53 @@ export default {
 </script>
 
 <style>
+body,html{
+  margin: 0;
+  padding:0;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+}
+h1,h2{
+   font-family: 'Oswald', sans-serif;
 }
 #nav {
-  padding: 30px;
+  padding: 1.2em;
+  background-color:#EB6982;
 }
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #e2d8d8;
+  font-size: 0.9em;
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: #edf1f0;
 }
 #nav a:hover{
-  color: #131b22;
+  color: #edf1f0;
 }
 #signout{
-  margin: 20px;
   background-color: transparent;
-  border: solid 1px #a4dbc5;
-  padding: 10px
+  border: none;
+  color:rgb(61, 61, 61);
+  font-weight: bold;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.5s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div class="yourteam">
     <team></team>
-    <p>That is your team</p>
   </div>
 </template>
 
@@ -14,7 +13,7 @@ export default {
     team: Team,
   },
   created() {
-    this.$store.dispatch('getTeam');
+    this.$store.dispatch('getTeam',this.$store.state.currentUser.uid);
   },
   
 };

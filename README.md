@@ -1,5 +1,6 @@
 # new-app
-
+link: https://teamshare-245f8.firebaseapp.com/login
+technologies used: VueJs, Vuex, Vue-router, Firebase Cloud 
 ## Project setup
 ```
 npm install
@@ -14,16 +15,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

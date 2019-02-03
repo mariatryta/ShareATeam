@@ -6,15 +6,14 @@ Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes: [  
     {
-      path: '/',
+      path: '/login',
       name: 'forms',
-      component: () => import(/* webpackChunkName: "about" */ './views/Login.vue'),
+      component: () => import('./views/Login.vue'),
     },
     {
-      path: '/team',
+      path: '/',
       name: 'home',
       component: Home,
       meta: {
@@ -53,7 +52,7 @@ router.beforeEach((to, from, next) => {
   
 // redirects use to login if they are not authenticated && try to access Your Team tab
   if (requiresAuth && !currentUser) {
-      next('/')
+      next('/login')
   } else if (requiresAuth && currentUser) {
       next()
   } else {

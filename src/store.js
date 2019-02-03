@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import firebase from 'firebase';
+import 'firebase/firestore';
 const fb = require('./firebaseConfig.js')
 
 Vue.use(Vuex);
-const axios = require('axios');
 
 export default new Vuex.Store({
   state: {
@@ -11,7 +12,7 @@ export default new Vuex.Store({
     userProfile: {},
     employees:[],
     team:[],
-    linked:null
+    showLoginForm: true,
   },
   mutations: {
     // updating user state
@@ -29,13 +30,17 @@ export default new Vuex.Store({
     },
     setLinked(state,val){
       state.linked = val
-    }
-      
+    },
+    changeLoginForm(state){
+      state.showLoginForm =!state.showLoginForm;
+    },
   },
   actions: {
+    // after logout
     clearData({commit}){
       commit('setCurrentUser', null);
       commit('setUserProfile', {});
+      commit('setTeam', []);
     },
     fetchUserProfile({ commit, state }) {
       // get currentUser.uid that we set before in loginform.vue and access data about user and save to profile   
@@ -58,8 +63,8 @@ export default new Vuex.Store({
         }) 
     },
     //retrieving team data from firebase
-    getTeam({commit,state}){
-      fb.teamCollection.doc(state.currentUser.uid).get().then(function(snapshot){
+    getTeam({commit,state},id){
+      fb.teamCollection.doc(id).get().then(function(snapshot){
         let data = snapshot.data()
         let arr=[]
         for (var key in data) {
@@ -78,24 +83,19 @@ export default new Vuex.Store({
        fb.teamCollection.doc(state.currentUser.uid).set({[member.key]:newMember},{merge: true}).then(function() {
          console.log("Document successfully written!");
       });
-      dispatch('getTeam')
+      dispatch('getTeam',state.currentUser.uid )
     },
-
-    // Link handling
-    getData({commit}, linkId){
-      console.log(linkId);
-      axios
-      .get('https://firestore.googleapis.com/v1beta1/projects/teamshare-245f8/databases/(default)/documents/chosenteam/'+ linkId)
-      .then(function(response){
-        let data = response.data.fields;
-        let arr=[];
-        let stringArr = [];
-        for (let key in data) {
-          arr.push(data[key].mapValue.fields)
+    removeMemberFromTeam({commit,state,dispatch}, member){
+      let memberId= member.id;
+      
+      fb.teamCollection.doc(state.currentUser.uid).update({
+        [memberId]:firebase.firestore.FieldValue.delete()
+      }).then(
+        function() {
+         console.log('deleted');
         }
-        commit('setLinked', arr)
-      }
       )
-    }
+      dispatch('getTeam',state.currentUser.uid )
+    },
   }
 });
