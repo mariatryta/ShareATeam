@@ -28,9 +28,6 @@ export default new Vuex.Store({
     setTeam(state,val){
       state.team = val
     },
-    setLinked(state,val){
-      state.linked = val
-    },
     changeLoginForm(state){
       state.showLoginForm =!state.showLoginForm;
     },
